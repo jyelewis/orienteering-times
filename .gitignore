@@ -10,3 +10,6 @@ infra/secrets.tf
 
 yarn-error.log
 
+build/
+bin/
+example-data/

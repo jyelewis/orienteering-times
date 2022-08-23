@@ -1,0 +1,7 @@
+{
+  "eventDataXMLPath": "../example-data/womens_GE.xml",
+  "eventDataPollFrequencySeconds": 1,
+  "port": 4000,
+  "recentSplitsExpirySeconds": 10,
+  "demoMode": true
+}

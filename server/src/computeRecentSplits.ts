@@ -2,7 +2,6 @@ import { EventData } from "./types/EventData";
 import { config } from "./config";
 
 // takes an old state & new state, finds recently completed splits
-// TODO: test me
 export function computeRecentSplits(
   prevEventData: EventData | null,
   newEventData: EventData

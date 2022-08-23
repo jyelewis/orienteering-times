@@ -23,4 +23,5 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           title: "Orienteering times"
+          prerelease: false
           files: ./server/bin/orienteering-times*

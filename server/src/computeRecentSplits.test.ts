@@ -14,22 +14,26 @@ const exampleEventData1: EventData = {
         {
           name: "John Smith",
           position: 1,
+          timeBehind: 0,
           splits: [
             {
               time: 10,
               controlCode: "Start",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
           ],
         },
         {
           name: "Jane Doe",
           position: 2,
+          timeBehind: 0,
           splits: [
             {
               time: 8,
               controlCode: "Start",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
           ],
         },
@@ -52,32 +56,38 @@ const exampleEventData2: EventData = {
         {
           name: "John Smith",
           position: 1,
+          timeBehind: 0,
           splits: [
             {
               time: 10,
               controlCode: "Start",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
             {
               time: 15,
               controlCode: "First",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
           ],
         },
         {
           name: "Jane Doe",
           position: 2,
+          timeBehind: 0,
           splits: [
             {
               time: 8,
               controlCode: "Start",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
             {
               time: 18,
               controlCode: "First",
               isAdditional: false,
+              timeSinceLastCode: 0,
             },
           ],
         },

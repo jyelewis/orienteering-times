@@ -13,12 +13,13 @@ export type EventData = {
       startTime?: string;
       finishTime?: string;
       time?: number;
-      timeBehind?: number;
+      timeBehind: number;
       position: number;
       splits: Array<{
         controlCode: string;
-        time?: number;
+        time: number;
         isAdditional: boolean;
+        timeSinceLastCode: number;
       }>;
     }>;
   }>;

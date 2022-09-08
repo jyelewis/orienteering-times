@@ -1,31 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { ResultsTable } from "./components/ResultsTable/ResultsTable";
-import { ResultsClass } from "./components/ResultsClass/ResultsClass";
-import { Search } from "../Search/Search";
-import { Box } from "@mui/material";
-import { useEventDataWithSearch } from "../../hooks/useEventDataWithSearch";
+import { EventData } from "../../../../server/src/types/EventData";
 
-export const Results: React.FC = () => {
-  const [searchText, setSearchText] = useState<string>("");
-  const isSearching = searchText !== "";
+export type Props = {
+  eventData: EventData;
+  classData: EventData["classes"][0];
+};
 
-  const eventData = useEventDataWithSearch(searchText);
-
+export const Results: React.FC<Props> = ({ eventData, classData }) => {
   return (
     <div>
-      <Box sx={{ padding: "10px" }}>
-        <Search searchText={searchText} setSearchText={setSearchText} />
-      </Box>
-
-      {eventData.classes.map((eventClass) => (
-        <ResultsClass
-          name={eventClass.name}
-          numberOfParticipants={eventClass.participants.length}
-          forceOpen={isSearching && eventClass.participants.length > 0}
-        >
-          <ResultsTable participants={eventClass.participants} />
-        </ResultsClass>
-      ))}
+      <ResultsTable participants={classData.participants} />
     </div>
   );
 };

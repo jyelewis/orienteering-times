@@ -1,12 +1,12 @@
 import { config } from "./config";
-import { EventData } from "./types/EventData";
+import { EventData, EventsData } from "./types/EventData";
 import fs from "fs/promises";
 import xml2js from "xml2js";
-import { computeRecentSplits } from "./computeRecentSplits";
+import glob from "glob-promise";
 
 export function watchLiveEventData() {
   // repeatedly poll for event data
-  processEventData()
+  processEventsData()
     .then(() => {
       setTimeout(
         () => watchLiveEventData(),
@@ -25,10 +25,33 @@ export function watchLiveEventData() {
     });
 }
 
-let latestEventData: null | EventData = null;
+let latestEventsData: null | EventsData = null;
 
-async function processEventData() {
-  const xml = await fs.readFile(config.eventDataXMLPath);
+async function processEventsData() {
+  const xmlFiles = await glob(config.eventDataXMLFolderPath);
+
+  const newEventData: EventsData = {};
+  (
+    await Promise.all(
+      xmlFiles.map(async (file) => {
+        try {
+          return await processEventData(file);
+        } catch (e) {
+          console.error(`Failed to parse ${file}`, e);
+        }
+      })
+    )
+  ).forEach((x) => {
+    if (x !== undefined) {
+      newEventData[x.slugName] = x;
+    }
+  });
+
+  latestEventsData = newEventData;
+}
+
+async function processEventData(xmlPath: string) {
+  const xml = await fs.readFile(xmlPath);
 
   const result = await xml2js.parseStringPromise(xml /*, options */);
 
@@ -49,12 +72,25 @@ async function processEventData() {
   // please don't tell anyone how I live
 
   // decode xml into simpler json structure with just the information we need
-  const newEventData = {
-    name: result.ResultList.Event?.[0]?.Name?.[0] || "Untitled event",
+  const eventName = result.ResultList.Event?.[0]?.Name?.[0] || "Untitled event";
+  let newEventData = {
+    name: eventName,
+    slugName: eventName
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, ""),
     date: result.ResultList.Event?.[0]?.StartTime?.[0].Date?.[0] || undefined,
     classes:
       result.ResultList.ClassResult?.map((classResult: any) => ({
         name: classResult.Class?.[0]?.Name?.[0],
+        slugName: classResult.Course?.[0]?.Name?.[0]
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/[\s_-]+/g, "-")
+          .replace(/^-+|-+$/g, ""),
         course: {
           name: classResult.Course?.[0]?.Name?.[0],
           numberOfControls: parseInt(
@@ -62,6 +98,7 @@ async function processEventData() {
             10
           ),
         },
+        splits: [],
         participants: classResult.PersonResult?.map((personResult: any) => ({
           name: `${personResult.Person?.[0]?.Name?.[0]?.Given?.[0]} ${personResult.Person?.[0]?.Name?.[0]?.Family?.[0]}`,
           bibNumber: personResult.Result?.[0]?.BibNumber?.[0],
@@ -86,8 +123,12 @@ async function processEventData() {
           ),
         })),
       })) || [],
-    recentSplits: [],
   } as EventData;
+
+  // filter out events with no participants
+  newEventData.classes = newEventData.classes.filter(
+    (x) => Array.isArray(x.participants) && x.participants.length > 0
+  );
 
   // sort participants by position
   newEventData.classes.forEach((thisClass) =>
@@ -115,14 +156,9 @@ async function processEventData() {
     )
   );
 
-  newEventData.recentSplits = computeRecentSplits(
-    latestEventData,
-    newEventData
-  );
-
-  latestEventData = newEventData;
+  return newEventData;
 }
 
-export function getLatestEventData() {
-  return latestEventData;
+export function getLatestEventsData() {
+  return latestEventsData;
 }

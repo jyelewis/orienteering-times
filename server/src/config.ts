@@ -3,7 +3,7 @@ import fs from "fs";
 const configPath = "./config.json";
 
 type Config = {
-  eventDataXMLPath: string;
+  eventDataXMLFolderPath: string;
   eventDataPollFrequencySeconds: number;
   port: number;
   recentSplitsExpirySeconds: number;
@@ -11,7 +11,7 @@ type Config = {
 };
 
 const defaultConfig = {
-  eventDataXMLPath: "./event-data.xml",
+  eventDataXMLFolderPath: "./event-data/**/*.xml",
   eventDataPollFrequencySeconds: 1,
   port: 4000,
   recentSplitsExpirySeconds: 60,
@@ -45,24 +45,20 @@ function loadConfigFromDisk(): Config {
   if (newConfig.demoMode) {
     console.log("--- DEMO MODE ---");
     let currentExampleFile = 1;
-    newConfig.eventDataXMLPath = `${__dirname}/../../demo-data/demo_${
+    newConfig.eventDataXMLFolderPath = `${__dirname}/../../demo-data/demo_${
       currentExampleFile + 1
-    }.xml`;
+    }/*.xml`;
 
     setInterval(() => {
-      newConfig.eventDataXMLPath = `${__dirname}/../../demo-data/demo_${
+      newConfig.eventDataXMLFolderPath = `${__dirname}/../../demo-data/demo_${
         currentExampleFile + 1
-      }.xml`;
+      }*.xml`;
       // loop from file 1 to 3 and back around again
       currentExampleFile = (currentExampleFile + 1) % 3;
     }, 5000);
   }
 
-  // check config is valid
-  if (!fs.existsSync(newConfig.eventDataXMLPath)) {
-    console.error(`${newConfig.eventDataXMLPath} not found, check config.json`);
-    process.exit(1);
-  }
+  console.log(`Looking for xml files in ${newConfig.eventDataXMLFolderPath}`);
 
   return newConfig;
 }

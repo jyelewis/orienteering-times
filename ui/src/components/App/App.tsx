@@ -1,19 +1,30 @@
 import React from "react";
-import { useEventData } from "../../hooks/useEventData";
-import { Results } from "../Results/Results";
+import { useEventsData } from "../../hooks/useEventsData";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { EventsList } from "./components/EventsList/EventsList";
+import { ClassDetail } from "./components/ClassDetail/ClassDetail";
+import { Footer } from "../Footer/Footer";
+import { ClassesList } from "./components/ClassesList/ClassesList";
 
 function App() {
-  const { isLoading, eventData } = useEventData();
+  const { isLoading } = useEventsData();
 
   if (isLoading) {
     return <div>Loading event data...</div>;
   }
 
   return (
-    <div className="App">
-      <Results />
-      <pre>{JSON.stringify(eventData, null, 2)}</pre>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<EventsList />} />
+        <Route path="/events/:eventSlugName" element={<ClassesList />} />
+        <Route
+          path="/events/:eventSlugName/:classSlugName"
+          element={<ClassDetail />}
+        />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 

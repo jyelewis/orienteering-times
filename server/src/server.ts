@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { getLatestEventData } from "./eventData";
+import { getLatestEventsData } from "./eventData";
 import { config } from "./config";
 
 export async function startServer() {
@@ -9,7 +9,7 @@ export async function startServer() {
   app.use(cors());
 
   app.get("/api/healthcheck", (req, res) => res.send("Healthy"));
-  app.get("/api/event-data", (req, res) => res.json(getLatestEventData()));
+  app.get("/api/events", (req, res) => res.json(getLatestEventsData()));
 
   // ui app
   app.use("/", express.static(__dirname + "/../../ui/build"));

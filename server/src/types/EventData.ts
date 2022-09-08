@@ -1,12 +1,19 @@
+export type EventsData = Record<string, EventData>;
+
 export type EventData = {
+  slugName: string;
   name: string;
   date?: string;
   classes: Array<{
     name: string;
+    slugName: string;
     course: {
       name: string;
       numberOfControls: number;
     };
+    splits: Array<{
+      controlCode: string;
+    }>;
     participants: Array<{
       name: string;
       bibNumber?: string;
@@ -22,12 +29,5 @@ export type EventData = {
         timeSinceLastCode: number;
       }>;
     }>;
-  }>;
-  recentSplits: Array<{
-    participantName: string;
-    controlCode: string;
-    secondsFromStart: number;
-    secondsFromPrevious: number;
-    expiry: number;
   }>;
 };

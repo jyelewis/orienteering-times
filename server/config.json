@@ -1,5 +1,5 @@
 {
-  "eventDataXMLPath": "../example-data/womens_GE.xml",
+  "eventDataXMLFolderPath": "../example-data/**/*.xml",
   "eventDataPollFrequencySeconds": 1,
   "port": 4000,
   "recentSplitsExpirySeconds": 10,

@@ -59,6 +59,11 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         sx={{ marginBottom: "10px" }}
         className={classes.tableHeader}
       >
+        {/*Space for place*/}
+        <Box
+          sx={{ width: "20px", minWidth: "20px" }}
+          className={classes.tableHeaderCell}
+        ></Box>
         {/*Space for name*/}
         <Box
           sx={{ width: "150px", minWidth: "150px" }}
@@ -76,6 +81,13 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         {participants.map((participant) => (
           <div key={participant.name} className={classes.tableRow}>
             <Box display="flex">
+              {/*Space for place*/}
+              <Box
+                sx={{ width: "20px", minWidth: "20px", textAlign: "center" }}
+                className={classes.tableCell}
+              >
+                {participant.position}
+              </Box>
               <Box
                 sx={{ width: "150px", minWidth: "150px" }}
                 className={classes.tableCell}

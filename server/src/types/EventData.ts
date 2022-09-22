@@ -19,6 +19,7 @@ export type EventData = {
       bibNumber?: string;
       startTime?: string;
       finishTime?: string;
+      status: string;
       time?: number;
       timeBehind: number;
       position: number;

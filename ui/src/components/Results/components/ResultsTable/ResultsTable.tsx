@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     top: "50px",
     left: 0,
     zIndex: 99,
+    backgroundColor: COLOR_YELLOW,
   },
   tableHeaderCell: {
     height: TABLE_ROW_HEIGHT,
@@ -61,8 +62,14 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
       >
         {/*Space for place*/}
         <Box
-          sx={{ width: "20px", minWidth: "20px" }}
-          className={classes.tableHeaderCell}
+          sx={{
+            width: "20px",
+            minWidth: "20px",
+            textAlign: "center",
+            padding: "5px",
+            height: TABLE_ROW_HEIGHT,
+            backgroundColor: COLOR_YELLOW,
+          }}
         ></Box>
         {/*Space for name*/}
         <Box
@@ -70,7 +77,7 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
           className={classes.tableHeaderCell}
         ></Box>
         {/*Space for time behind*/}
-        <Box className={classes.tableHeaderCell}>Behind first</Box>
+        <Box className={classes.tableHeaderCell}>Time</Box>
         {splitPoints.map((pointIndex) => (
           <Box className={classes.tableHeaderCell}>{pointIndex}</Box>
         ))}
@@ -81,10 +88,13 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         {participants.map((participant) => (
           <div key={participant.name} className={classes.tableRow}>
             <Box display="flex">
-              {/*Space for place*/}
               <Box
-                sx={{ width: "20px", minWidth: "20px", textAlign: "center" }}
-                className={classes.tableCell}
+                sx={{
+                  width: "20px",
+                  minWidth: "20px",
+                  textAlign: "center",
+                  padding: "5px",
+                }}
               >
                 {participant.position}
               </Box>
@@ -95,9 +105,24 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                 {participant.name}
               </Box>
               <Box className={classes.tableCell}>
-                {participant.timeBehind > 0
-                  ? ` +${formatTime(participant.timeBehind)}`
-                  : ""}
+                {participant.status === "OK" ? (
+                  <>
+                    {participant.startTime &&
+                      formatTime(
+                        ((participant.finishTime
+                          ? new Date(participant.finishTime).getTime()
+                          : Date.now()) -
+                          new Date(participant.startTime).getTime()) /
+                          1000
+                      )}
+                    <br />
+                    {participant.timeBehind > 0
+                      ? ` +${formatTime(participant.timeBehind)}`
+                      : ""}
+                  </>
+                ) : (
+                  <>{participant.status}</>
+                )}
               </Box>
               {participant.splits.map((split) => (
                 <Box className={classes.tableCell}>

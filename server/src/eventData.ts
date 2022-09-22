@@ -104,6 +104,7 @@ async function processEventData(xmlPath: string) {
           bibNumber: personResult.Result?.[0]?.BibNumber?.[0],
           startTime: personResult.Result?.[0]?.StartTime?.[0],
           finishTime: personResult.Result?.[0]?.FinishTime?.[0],
+          status: personResult.Result?.[0]?.Status?.[0] || "OK",
           time: parseInt(personResult.Result?.[0]?.Time?.[0], 10),
           timeBehind: parseInt(personResult.Result?.[0]?.TimeBehind?.[0], 10),
           position: parseInt(personResult.Result?.[0]?.Position?.[0], 10),

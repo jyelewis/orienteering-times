@@ -85,7 +85,7 @@ async function processEventData(xmlPath: string) {
     classes:
       result.ResultList.ClassResult?.map((classResult: any) => ({
         name: classResult.Class?.[0]?.Name?.[0],
-        slugName: classResult.Course?.[0]?.Name?.[0]
+        slugName: classResult.Class?.[0]?.Name?.[0]
           .toLowerCase()
           .trim()
           .replace(/[^\w\s-]/g, "")

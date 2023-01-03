@@ -7,13 +7,18 @@ import { makeStyles } from "@mui/styles";
 import { COLOR_GREY, COLOR_YELLOW } from "../../../../colors";
 
 const TABLE_ROW_HEIGHT = "35px";
+const POSITION_WIDTH_PX = 20;
 
 export type Props = {
   participants: EventData["classes"][0]["participants"];
 };
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+    position: "absolute",
+    top: "50px", // header height
+    bottom: "50px", // footer height
+  },
   tableHeader: {
     position: "sticky",
     top: "50px",
@@ -29,6 +34,9 @@ const useStyles = makeStyles({
     backgroundColor: COLOR_YELLOW,
   },
   tableRow: {
+    "& *": {
+      backgroundColor: "white",
+    },
     "&:nth-child(2n)": {
       "& *": {
         backgroundColor: COLOR_GREY,
@@ -63,8 +71,8 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         {/*Space for place*/}
         <Box
           sx={{
-            width: "20px",
-            minWidth: "20px",
+            width: `${POSITION_WIDTH_PX}px`,
+            minWidth: `${POSITION_WIDTH_PX}px`,
             textAlign: "center",
             padding: "5px",
             height: TABLE_ROW_HEIGHT,
@@ -94,12 +102,20 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                   minWidth: "20px",
                   textAlign: "center",
                   padding: "5px",
+
+                  position: "sticky",
+                  left: 0,
                 }}
               >
                 {participant.position}
               </Box>
               <Box
-                sx={{ width: "150px", minWidth: "150px" }}
+                sx={{
+                  width: "150px",
+                  minWidth: "150px",
+                  position: "sticky",
+                  left: POSITION_WIDTH_PX + 10,
+                }}
                 className={classes.tableCell}
               >
                 {participant.name}
@@ -126,53 +142,6 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
               </Box>
               {participant.splits.map((split) => (
                 <Box className={classes.tableCell}>
-                  {formatTime(split.time)}
-                  {split.timeSinceLastCode > 0
-                    ? ` (${formatTime(split.timeSinceLastCode)})`
-                    : ""}
-                </Box>
-              ))}
-            </Box>
-          </div>
-        ))}
-      </FlipMove>
-    </div>
-  );
-};
-
-export const ResultsTableOld: React.FC<Props> = ({ participants }) => {
-  const maxSplitPoints = Math.max(
-    ...participants.map((x) => x.splits.length),
-    0
-  );
-  const splitPoints = new Array(maxSplitPoints).fill(null).map((_, i) => i + 1);
-
-  return (
-    <div className="component-ResultsTable">
-      {/*Table header*/}
-      <Box display="flex" sx={{ marginBottom: "10px" }}>
-        {/*Space for name*/}
-        <Box sx={{ width: "200px" }}></Box>
-        {/*Space for time behind*/}
-        <Box sx={{ width: "200px" }}>Behind first</Box>
-        {splitPoints.map((pointIndex) => (
-          <Box sx={{ width: "200px" }}>{pointIndex}</Box>
-        ))}
-      </Box>
-
-      {/*// @ts-ignore*/}
-      <FlipMove>
-        {participants.map((participant) => (
-          <div key={participant.name}>
-            <Box display="flex">
-              <Box sx={{ width: "200px" }}>{participant.name} </Box>
-              <Box sx={{ width: "200px" }}>
-                {participant.timeBehind > 0
-                  ? ` +${formatTime(participant.timeBehind)}`
-                  : ""}
-              </Box>
-              {participant.splits.map((split) => (
-                <Box sx={{ width: "200px" }}>
                   {formatTime(split.time)}
                   {split.timeSinceLastCode > 0
                     ? ` (${formatTime(split.timeSinceLastCode)})`

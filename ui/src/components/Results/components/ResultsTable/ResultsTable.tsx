@@ -114,7 +114,7 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
           <Typography fontWeight="bold">Total</Typography>
         </Box>
         {splitPoints.map((pointIndex) => (
-          <Box className={classes.tableHeaderCell}>
+          <Box className={classes.tableHeaderCell} key={pointIndex}>
             <Typography fontWeight="bold">{pointIndex}</Typography>
           </Box>
         ))}
@@ -189,8 +189,8 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                   <>{participant.status}</>
                 )}
               </Box>
-              {participant.splits.map((split) => (
-                <Box className={classes.tableCell}>
+              {participant.splits.map((split, index) => (
+                <Box className={classes.tableCell} key={index}>
                   <Typography fontSize={14}>
                     {formatTime(split.time)}
                   </Typography>

@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   root: {
     position: "absolute",
     top: "50px", // header height
-    bottom: "50px", // footer height
+    // bottom: "50px", // footer height
   },
   tableHeader: {
     position: "sticky",
@@ -41,6 +41,9 @@ const useStyles = makeStyles({
       "& *": {
         backgroundColor: COLOR_GREY,
       },
+    },
+    "&:last-child": {
+      marginBottom: "50px", // footer height
     },
   },
   tableCell: {
@@ -102,6 +105,9 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                   minWidth: "20px",
                   textAlign: "center",
                   padding: "5px",
+
+                  // overflow: "hidden",
+                  // whiteSpace: "nowrap",
 
                   position: "sticky",
                   left: 0,

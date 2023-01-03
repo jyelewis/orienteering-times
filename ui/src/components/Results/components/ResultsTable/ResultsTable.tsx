@@ -1,13 +1,14 @@
 import React from "react";
 import { EventData } from "../../../../../../server/src/types/EventData";
 import FlipMove from "react-flip-move";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { formatTime } from "../../../../utils/formatTime";
 import { makeStyles } from "@mui/styles";
 import { COLOR_GREY, COLOR_YELLOW } from "../../../../colors";
 
 const TABLE_ROW_HEIGHT = "35px";
 const POSITION_WIDTH_PX = 20;
+const SPLIT_WIDTH_PX = 55;
 
 export type Props = {
   participants: EventData["classes"][0]["participants"];
@@ -29,9 +30,10 @@ const useStyles = makeStyles({
   tableHeaderCell: {
     height: TABLE_ROW_HEIGHT,
     padding: "5px",
-    width: "120px",
-    minWidth: "120px",
+    width: `${SPLIT_WIDTH_PX}px`,
+    minWidth: `${SPLIT_WIDTH_PX}px`,
     backgroundColor: COLOR_YELLOW,
+    textAlign: "center",
   },
   tableRow: {
     "& *": {
@@ -49,8 +51,9 @@ const useStyles = makeStyles({
   tableCell: {
     height: TABLE_ROW_HEIGHT,
     padding: "5px",
-    width: "120px",
-    minWidth: "120px",
+    width: `${SPLIT_WIDTH_PX}px`,
+    minWidth: `${SPLIT_WIDTH_PX}px`,
+    textAlign: "right",
   },
 });
 
@@ -66,11 +69,7 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
   return (
     <div className={classes.root}>
       {/*Table header*/}
-      <Box
-        display="flex"
-        sx={{ marginBottom: "10px" }}
-        className={classes.tableHeader}
-      >
+      <Box display="flex" className={classes.tableHeader}>
         {/*Space for place*/}
         <Box
           sx={{
@@ -84,13 +83,40 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         ></Box>
         {/*Space for name*/}
         <Box
-          sx={{ width: "150px", minWidth: "150px" }}
+          sx={{
+            width: "150px",
+            minWidth: "150px",
+            position: "sticky",
+            left: POSITION_WIDTH_PX + 10,
+            paddingTop: "3px !important", // make a little more room for the name here
+          }}
           className={classes.tableHeaderCell}
-        ></Box>
+        >
+          <Typography
+            fontSize={14}
+            fontWeight="bold"
+            textAlign="left"
+            sx={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis ellipsis",
+            }}
+          >
+            Name
+          </Typography>
+          <Typography fontSize={12} textAlign="left">
+            Club
+          </Typography>
+        </Box>
+
         {/*Space for time behind*/}
-        <Box className={classes.tableHeaderCell}>Time</Box>
+        <Box className={classes.tableHeaderCell}>
+          <Typography fontWeight="bold">Total</Typography>
+        </Box>
         {splitPoints.map((pointIndex) => (
-          <Box className={classes.tableHeaderCell}>{pointIndex}</Box>
+          <Box className={classes.tableHeaderCell}>
+            <Typography fontWeight="bold">{pointIndex}</Typography>
+          </Box>
         ))}
       </Box>
 
@@ -105,9 +131,7 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                   minWidth: "20px",
                   textAlign: "center",
                   padding: "5px",
-
-                  // overflow: "hidden",
-                  // whiteSpace: "nowrap",
+                  paddingTop: "11px",
 
                   position: "sticky",
                   left: 0,
@@ -121,26 +145,45 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                   minWidth: "150px",
                   position: "sticky",
                   left: POSITION_WIDTH_PX + 10,
+                  paddingTop: "3px !important", // make a little more room for the name here
                 }}
                 className={classes.tableCell}
               >
-                {participant.name}
+                <Typography
+                  fontSize={14}
+                  fontWeight="bold"
+                  textAlign="left"
+                  sx={{
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis ellipsis",
+                  }}
+                >
+                  {participant.name}
+                </Typography>
+                {/*// TODO: make this their club instead*/}
+                <Typography fontSize={12} textAlign="left">
+                  North Melbourne
+                </Typography>
               </Box>
               <Box className={classes.tableCell}>
                 {participant.status === "OK" ? (
                   <>
-                    {participant.startTime &&
-                      formatTime(
-                        ((participant.finishTime
-                          ? new Date(participant.finishTime).getTime()
-                          : Date.now()) -
-                          new Date(participant.startTime).getTime()) /
-                          1000
-                      )}
-                    <br />
-                    {participant.timeBehind > 0
-                      ? ` +${formatTime(participant.timeBehind)}`
-                      : ""}
+                    <Typography fontSize={14} fontWeight="bold">
+                      {participant.startTime &&
+                        formatTime(
+                          ((participant.finishTime
+                            ? new Date(participant.finishTime).getTime()
+                            : Date.now()) -
+                            new Date(participant.startTime).getTime()) /
+                            1000
+                        )}
+                    </Typography>
+                    <Typography fontSize={12} fontWeight="bold">
+                      {participant.timeBehind > 0
+                        ? ` +${formatTime(participant.timeBehind)}`
+                        : ""}
+                    </Typography>
                   </>
                 ) : (
                   <>{participant.status}</>
@@ -148,10 +191,14 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
               </Box>
               {participant.splits.map((split) => (
                 <Box className={classes.tableCell}>
-                  {formatTime(split.time)}
-                  {split.timeSinceLastCode > 0
-                    ? ` (${formatTime(split.timeSinceLastCode)})`
-                    : ""}
+                  <Typography fontSize={14}>
+                    {formatTime(split.time)}
+                  </Typography>
+                  <Typography fontSize={12}>
+                    {split.timeSinceLastCode > 0
+                      ? ` (${formatTime(split.timeSinceLastCode)})`
+                      : ""}
+                  </Typography>
                 </Box>
               ))}
             </Box>

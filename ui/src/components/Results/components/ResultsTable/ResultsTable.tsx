@@ -182,7 +182,7 @@ export const ResultsTable: React.FC<Props> = ({
                     </Typography>
                     <Typography fontSize={12} fontWeight="bold">
                       {participant.timeBehind > 0
-                        ? ` +${formatTime(participant.timeBehind)}`
+                        ? ` -${formatTime(participant.timeBehind)}`
                         : ""}
                     </Typography>
                   </>

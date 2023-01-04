@@ -10,7 +10,10 @@ export type Props = {
 export const Results: React.FC<Props> = ({ eventData, classData }) => {
   return (
     <div>
-      <ResultsTable participants={classData.participants} />
+      <ResultsTable
+        participants={classData.participants}
+        classSplits={classData.splits}
+      />
     </div>
   );
 };

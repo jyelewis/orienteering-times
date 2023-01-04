@@ -1,5 +1,13 @@
 export type EventsData = Record<string, EventData>;
 
+export type Split = {
+  missed: boolean;
+  controlCode: string;
+  time: number;
+  isAdditional: boolean;
+  timeSinceLastCode: number;
+};
+
 export type EventData = {
   slugName: string;
   name: string;
@@ -11,11 +19,10 @@ export type EventData = {
       name: string;
       numberOfControls: number;
     };
-    splits: Array<{
-      controlCode: string;
-    }>;
+    splits: Split[];
     participants: Array<{
       name: string;
+      organization?: string;
       bibNumber?: string;
       startTime?: string;
       finishTime?: string;
@@ -23,12 +30,8 @@ export type EventData = {
       time?: number;
       timeBehind: number;
       position: number;
-      splits: Array<{
-        controlCode: string;
-        time: number;
-        isAdditional: boolean;
-        timeSinceLastCode: number;
-      }>;
+      rawSplits: Split[];
+      splits: Split[];
     }>;
   }>;
 };

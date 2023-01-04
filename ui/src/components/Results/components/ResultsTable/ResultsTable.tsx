@@ -9,16 +9,18 @@ import { COLOR_GREY, COLOR_YELLOW } from "../../../../colors";
 const TABLE_ROW_HEIGHT = "35px";
 const POSITION_WIDTH_PX = 20;
 const SPLIT_WIDTH_PX = 55;
+const NAME_WIDTH_PX = 150;
 
 export type Props = {
   participants: EventData["classes"][0]["participants"];
+  classSplits: EventData["classes"][0]["splits"];
 };
 
 const useStyles = makeStyles({
   root: {
     position: "absolute",
     top: "50px", // header height
-    // bottom: "50px", // footer height
+    minWidth: "100%",
   },
   tableHeader: {
     position: "sticky",
@@ -57,14 +59,11 @@ const useStyles = makeStyles({
   },
 });
 
-export const ResultsTable: React.FC<Props> = ({ participants }) => {
+export const ResultsTable: React.FC<Props> = ({
+  participants,
+  classSplits,
+}) => {
   const classes = useStyles();
-
-  const maxSplitPoints = Math.max(
-    ...participants.map((x) => x.splits.length),
-    0
-  );
-  const splitPoints = new Array(maxSplitPoints).fill(null).map((_, i) => i + 1);
 
   return (
     <div className={classes.root}>
@@ -79,13 +78,16 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
             padding: "5px",
             height: TABLE_ROW_HEIGHT,
             backgroundColor: COLOR_YELLOW,
+
+            position: "sticky",
+            left: 0,
           }}
         ></Box>
         {/*Space for name*/}
         <Box
           sx={{
-            width: "150px",
-            minWidth: "150px",
+            width: `${NAME_WIDTH_PX}px !important`,
+            minWidth: `${NAME_WIDTH_PX}px`,
             position: "sticky",
             left: POSITION_WIDTH_PX + 10,
             paddingTop: "3px !important", // make a little more room for the name here
@@ -113,9 +115,9 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
         <Box className={classes.tableHeaderCell}>
           <Typography fontWeight="bold">Total</Typography>
         </Box>
-        {splitPoints.map((pointIndex) => (
-          <Box className={classes.tableHeaderCell} key={pointIndex}>
-            <Typography fontWeight="bold">{pointIndex}</Typography>
+        {classSplits.map(({ controlCode }, index) => (
+          <Box className={classes.tableHeaderCell} key={index}>
+            <Typography fontWeight="bold">{controlCode}</Typography>
           </Box>
         ))}
       </Box>
@@ -141,8 +143,8 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
               </Box>
               <Box
                 sx={{
-                  width: "150px",
-                  minWidth: "150px",
+                  width: `${NAME_WIDTH_PX}px !important`,
+                  minWidth: `${NAME_WIDTH_PX}px`,
                   position: "sticky",
                   left: POSITION_WIDTH_PX + 10,
                   paddingTop: "3px !important", // make a little more room for the name here
@@ -161,9 +163,8 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
                 >
                   {participant.name}
                 </Typography>
-                {/*// TODO: make this their club instead*/}
                 <Typography fontSize={12} textAlign="left">
-                  North Melbourne
+                  {participant.organization || ""}
                 </Typography>
               </Box>
               <Box className={classes.tableCell}>
@@ -191,14 +192,20 @@ export const ResultsTable: React.FC<Props> = ({ participants }) => {
               </Box>
               {participant.splits.map((split, index) => (
                 <Box className={classes.tableCell} key={index}>
-                  <Typography fontSize={14}>
-                    {formatTime(split.time)}
-                  </Typography>
-                  <Typography fontSize={12}>
-                    {split.timeSinceLastCode > 0
-                      ? ` (${formatTime(split.timeSinceLastCode)})`
-                      : ""}
-                  </Typography>
+                  {split.missed ? (
+                    <>-</>
+                  ) : (
+                    <>
+                      <Typography fontSize={14}>
+                        {formatTime(split.time)}
+                      </Typography>
+                      <Typography fontSize={12}>
+                        {split.timeSinceLastCode > 0
+                          ? ` (${formatTime(split.timeSinceLastCode)})`
+                          : ""}
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               ))}
             </Box>

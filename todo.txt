@@ -1,13 +1,14 @@
 * Replicate the style of Lukes designs
     * Make the position/name column sticky
     * Fonts & formatting
--------
+
 * Additional content
     * Reference control-code when assigning column, sometimes controls get missed
-    * Calculate 'time behind' based on the current fastest time (- Time behind column for overall   ie.  +00:08  calculated off the fastest time.  The fastest time will change during the event depending on when finishers come in so this probably needs to check for changes regularly.)
-        * Should show this for each split
     * Control Number next to split number in the heading column.  Xml reference <ControlCode>.   if <ControlCode> is equal to 999  display text ‘Finish’
     * Club added.   in XML its under <Organisation>  and then display the <Name>
+-------
+    * Calculate 'time behind' based on the current fastest time (- Time behind column for overall   ie.  +00:08  calculated off the fastest time.  The fastest time will change during the event depending on when finishers come in so this probably needs to check for changes regularly.)
+        * Should show this for each split
 
 * Ability to favourite
 
